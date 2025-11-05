@@ -1,5 +1,4 @@
-import os
+# Configuration settings can be added here
 
-class Config:
-    DEBUG = os.getenv('DEBUG', 'False') == 'True'
-    DATABASE_URL = os.getenv('DATABASE_URL', 'sqlite:///todos.db')
+# Example:
+# DATABASE_URI = 'mongodb://localhost:27017/todo_db'

@@ -1,33 +1,17 @@
-from datetime import datetime
-from models import Todo
+from models import TodoItem, TodoList
 
-# In-memory storage for todos
-_todos = []
+todo_list = TodoList()
 
-def create_todo(title: str, description: str = None, due_date: str = None) -> dict:
-    todo_id = str(len(_todos) + 1)
-    new_todo = Todo(
-        id=todo_id,
-        title=title,
-        description=description,
-        due_date=due_date,
-        status=False,
-        creation_date=datetime.now().isoformat()
-    )
-    _todos.append(new_todo)
-    return {"message": "Todo created successfully", "todo": new_todo.dict()}
+def create_todo_item(title: str, description: str = None, dueDate: str = None) -> dict:
+    todo = TodoItem(title, description, dueDate)
+    todo_list.add(todo)
+    return todo.__dict__
 
-def list_todos(filters: dict = None) -> list:
-    if filters:
-        completed = filters.get('completed')
-        due_soon = filters.get('due_soon')
-        filtered_todos = [todo.dict() for todo in _todos if (completed is None or todo.status == completed)]
-        return filtered_todos
-    return [todo.dict() for todo in _todos]
+def complete_todo_item(id: str) -> dict:
+    updated_item = todo_list.complete(id)
+    if updated_item:
+        return updated_item.__dict__
+    raise ValueError("Todo item not found")
 
-def complete_todo(todo_id: str) -> dict:
-    for todo in _todos:
-        if todo.id == todo_id:
-            todo.status = True
-            return {"message": "Todo marked as complete", "todo": todo.dict()}
-    return {"error": "Todo not found"}
+def list_todo_items(status: str) -> list:
+    return [todo.__dict__ for todo in todo_list.list(status)]

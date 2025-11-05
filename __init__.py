@@ -1,1 +1,1 @@
-# Package initialization for TodoManagerMCP
+# Package initialization
